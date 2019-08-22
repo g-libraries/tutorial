@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="tutorial_gradient_start">#FFF578EA</color>
+    <color name="tutorial_gradient_end">#6436b2</color>
+    <color name="tutorial_icon_bg">#FFF578EA</color>
+
+</resources>
