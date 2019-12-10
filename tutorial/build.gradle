@@ -35,6 +35,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.github.g-libraries:basicexstensions:1.0'
+    api 'com.github.g-libraries:common:1.0.0'
 }
 repositories {
     mavenCentral()

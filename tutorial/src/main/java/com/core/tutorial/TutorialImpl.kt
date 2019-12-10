@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.TextView
 import com.core.basicextensions.applyGlobalLayoutListener
+import com.core.common.interfaces.ITutorial
 import kotlinx.android.synthetic.main.tutorial_overlay.view.*
 
 
