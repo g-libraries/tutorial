@@ -186,22 +186,11 @@ abstract class TutorialImpl(
         fun apply() = tutorialOverlayStrategy.invoke()
     }
 
-    val showBelow = {
-        createOverLay(
-            R.drawable.tutorial_line2,
-            Pair(x + (radius * 1.2F), y - (radius * 3F)),
-            Pair((x / 3.5F), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
-            textOnTop = false,
-            bottomNav = false
-        )
-    }
-
     val showBelowRight = {
         createOverLay(
             R.drawable.tutorial_line1,
-            Pair(x + (radius * 1.2F), y),
-            Pair((x / 2F), y + (radius * 0.5f)),
+            Pair(x + (radius * 1.25F), y),
+            Pair((x / 2F), y + (radius * 0.6f)),
             Pair(
                 params.BIAS_ZERO,
                 params.BIAS_ZERO
@@ -217,6 +206,28 @@ abstract class TutorialImpl(
             Pair((x - (radius * 2.7F)), y - (radius * 1.5F)),
             Pair((x - (radius * 3.2F)), y - (radius * 3F)),
             Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
+            textOnTop = false,
+            bottomNav = false
+        )
+    }
+
+    val showBelowCenter = {
+        createOverLay(
+            R.drawable.tutorial_line2,
+            Pair(x + (radius * 1.2F), y + (radius * 3F)),
+            Pair((x / 3.5F), y + (radius * 3F)),
+            Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
+            textOnTop = false,
+            bottomNav = false
+        )
+    }
+
+    val showAboveCenter = {
+        createOverLay(
+            R.drawable.tutorial_line2,
+            Pair(x + (radius * 1.2F), y - (radius * 3F)),
+            Pair((x / 3.5F), y - (radius * 3F)),
+            Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
             textOnTop = false,
             bottomNav = false
         )
