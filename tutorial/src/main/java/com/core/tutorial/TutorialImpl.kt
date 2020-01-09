@@ -190,7 +190,7 @@ abstract class TutorialImpl(
         createOverLay(
             R.drawable.tutorial_line1,
             Pair(x + (radius * 1.25F), y),
-            Pair((x / 2F), y + (radius * 0.8f)),
+            Pair((x / 2F), y + radius),
             Pair(
                 params.BIAS_ZERO,
                 params.BIAS_ZERO
@@ -214,7 +214,7 @@ abstract class TutorialImpl(
     val showBelowCenter = {
         createOverLay(
             R.drawable.tutorial_line2,
-            Pair(x + (radius * 1.2F), y + (radius * 3F)),
+            Pair(x + (radius * 1.2F), y + (radius * 2F)),
             Pair((x / 4F), y + (radius * 3F)),
             Pair(-params.BIAS_SMALL, params.BIAS_SMALL),
             textOnTop = false,
@@ -258,7 +258,7 @@ abstract class TutorialImpl(
     val showOnBottomNavLeft = {
         createOverLay(
             R.drawable.tutorial_line3,
-            Pair((x - (radius * 3F)), y - (radius * 1.5F)),
+            Pair((x - (radius * 3.5F)), y - (radius * 1.5F)),
             Pair((x - (radius * 4F)), y - (radius * 3F)),
             Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
             textOnTop = false,
