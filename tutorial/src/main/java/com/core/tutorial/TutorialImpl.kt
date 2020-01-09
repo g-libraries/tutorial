@@ -190,7 +190,7 @@ abstract class TutorialImpl(
         createOverLay(
             R.drawable.tutorial_line1,
             Pair(x + (radius * 1.25F), y),
-            Pair((x / 2F), y + (radius * 0.6f)),
+            Pair((x / 2F), y + (radius * 0.4f)),
             Pair(
                 params.BIAS_ZERO,
                 params.BIAS_ZERO
@@ -216,7 +216,7 @@ abstract class TutorialImpl(
             R.drawable.tutorial_line2,
             Pair(x + (radius * 1.2F), y + (radius * 3F)),
             Pair((x / 3.5F), y + (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
+            Pair(-params.BIAS_SMALL, params.BIAS_LARGE),
             textOnTop = false,
             bottomNav = false
         )
