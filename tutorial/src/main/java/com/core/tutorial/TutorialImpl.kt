@@ -22,25 +22,26 @@ import kotlinx.android.synthetic.main.tutorial_overlay.view.*
  * rootView - Tutorial container
  */
 abstract class TutorialImpl(
-    val params: Params,
-    var active: Boolean,
-    private val rootActivity: Activity,
-    val rootView: FrameLayout
+        val params: Params,
+        var active: Boolean,
+        private val rootActivity: Activity,
+        val rootView: FrameLayout
 ) : ITutorial {
 
     data class Params(
-        // Start and End gradient IDs
-        var gradientColorIds: Pair<Int, Int> = Pair(R.color.tutorial_gradient_start, R.color.tutorial_gradient_end),
-        // Bottom nav icon bg gradiend ID
-        var iconBGColorId: Int = R.color.tutorial_icon_bg,
-        // Text layout ID and TextVies IDs
-        var textLayoutId: Int = R.layout.tutorial_text,
-        var textViewTitleId: Int = R.id.tutorial_text_title,
-        var textViewMessageId: Int = R.id.tutorial_text_message,
-        // Tutorial biases for background and central "hole" positioning
-        var BIAS_ZERO: Float = 0F,
-        var BIAS_SMALL: Float = 0.12F,
-        var BIAS_LARGE: Float = 0.37F
+            // Start and End gradient IDs
+            var gradientColorIds: Pair<Int, Int> = Pair(R.color.tutorial_gradient_start, R.color.tutorial_gradient_end),
+            // Bottom nav icon bg gradiend ID
+            var iconBGColorId: Int = R.color.tutorial_icon_bg,
+            // Text layout ID and TextVies IDs
+            var textLayoutId: Int = R.layout.tutorial_text,
+            var textViewTitleId: Int = R.id.tutorial_text_title,
+            var textViewMessageId: Int = R.id.tutorial_text_message,
+            // Tutorial biases for background and central "hole" positioning
+            var BIAS_ZERO: Float = 0F,
+            var BIAS_SMALL: Float = 0.12F,
+            var BIAS_LARGE: Float = 0.37F,
+            var withBottomNav: Boolean = true
     )
 
     private lateinit var titleTV: TextView
@@ -58,6 +59,7 @@ abstract class TutorialImpl(
 
     // Override to control Tutorial logic
     abstract fun startTutorial()
+
     abstract fun stopTutorial()
     abstract fun showStep()
 
@@ -74,12 +76,12 @@ abstract class TutorialImpl(
      * Create and show Tutorial view
      */
     private fun createOverLay(
-        lvId: Int,
-        lvXY: Pair<Float, Float>,
-        tvXY: Pair<Float, Float>,
-        bgBiasHorVert: Pair<Float, Float>,
-        textOnTop: Boolean,
-        bottomNav: Boolean
+            lvId: Int,
+            lvXY: Pair<Float, Float>,
+            tvXY: Pair<Float, Float>,
+            bgBiasHorVert: Pair<Float, Float>,
+            textOnTop: Boolean,
+            bottomNav: Boolean = false
     ) {
         // Clear old tutorial views
         rootView.removeAllViews()
@@ -101,8 +103,8 @@ abstract class TutorialImpl(
         val lineView = ImageView(rootActivity)
         lineView.setImageDrawable(ContextCompat.getDrawable(rootActivity, lvId))
         lineView.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
         )
         lineView.x = lvXY.first
         lineView.y = lvXY.second
@@ -124,8 +126,8 @@ abstract class TutorialImpl(
         val iconBGView = ImageView(rootActivity)
         iconBGView.setBackgroundColor(ContextCompat.getColor(rootActivity, params.iconBGColorId))
         iconBGView.layoutParams = LinearLayout.LayoutParams(
-            radius.toInt() * 3,
-            radius.toInt() * 3
+                radius.toInt() * 3,
+                radius.toInt() * 3
         )
 
         if (bottomNav) {
@@ -137,8 +139,8 @@ abstract class TutorialImpl(
             }
             bottomNavIconIV = ImageView(rootActivity)
             bottomNavIconIV.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
             )
             bottomNavIconIV.applyGlobalLayoutListener {
                 it?.let {
@@ -188,81 +190,76 @@ abstract class TutorialImpl(
 
     val showBelowRight = {
         createOverLay(
-            R.drawable.tutorial_line1,
-            Pair(x + (radius * 1.25F), y),
-            Pair((x / 2F), y + radius),
-            Pair(
-                params.BIAS_ZERO,
-                params.BIAS_ZERO
-            ),
-            textOnTop = true,
-            bottomNav = false
+                R.drawable.tutorial_line1,
+                Pair(x + (radius * 1.25F), y),
+                Pair((x / 2F), y + radius),
+                Pair(
+                        params.BIAS_ZERO,
+                        params.BIAS_ZERO
+                ),
+                textOnTop = true
         )
     }
 
     val showAbove = {
         createOverLay(
-            R.drawable.tutorial_line3,
-            Pair((x - (radius * 2.7F)), y - (radius * 1.5F)),
-            Pair((x - (radius * 3.2F)), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
-            textOnTop = false,
-            bottomNav = false
+                R.drawable.tutorial_line3,
+                Pair((x - (radius * 2.7F)), y - (radius * 1.5F)),
+                Pair((x - (radius * 3.2F)), y - (radius * 3F)),
+                Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
+                textOnTop = false
         )
     }
 
     val showBelowCenter = {
         createOverLay(
-            R.drawable.tutorial_line2,
-            Pair(x + (radius * 1.2F), y + (radius * 2F)),
-            Pair((x / 3.5F), y + (radius * 2F)),
-            Pair(-params.BIAS_SMALL, params.BIAS_SMALL),
-            textOnTop = false,
-            bottomNav = false
+                R.drawable.tutorial_line2,
+                Pair(x + (radius * 1.2F), y + (radius * 2F)),
+                Pair((x / 3.5F), y + (radius * 2F)),
+                Pair(-params.BIAS_SMALL, params.BIAS_SMALL),
+                textOnTop = false
         )
     }
 
     val showAboveCenter = {
         createOverLay(
-            R.drawable.tutorial_line2,
-            Pair(x + (radius * 1.2F), y - (radius * 3F)),
-            Pair((x / 3.5F), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
-            textOnTop = false,
-            bottomNav = false
+                R.drawable.tutorial_line2,
+                Pair(x + (radius * 1.2F), y - (radius * 3F)),
+                Pair((x / 3.5F), y - (radius * 3F)),
+                Pair(-params.BIAS_SMALL, -params.BIAS_LARGE),
+                textOnTop = false
         )
     }
 
     val showAboveLeft = {
         createOverLay(
-            R.drawable.tutorial_line3,
-            Pair((x - (radius * 3F)), y - (radius * 1.5F)),
-            Pair((x - (radius * 4F)), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
-            textOnTop = false,
-            bottomNav = false
+                R.drawable.tutorial_line3,
+                Pair((x - (radius * 3F)), y - (radius * 1.5F)),
+                Pair((x - (radius * 4F)), y - (radius * 3F)),
+                Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
+                textOnTop = false
         )
     }
 
     val showOnBottomNav = {
         createOverLay(
-            R.drawable.tutorial_line3,
-            Pair((x - (radius * 2.7F)), y - (radius * 1.5F)),
-            Pair((x - (radius * 3.2F)), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
-            textOnTop = false,
-            bottomNav = true
+                R.drawable.tutorial_line3,
+                Pair((x - (radius * 2.7F)), y - (radius * 1.5F)),
+                Pair((x - (radius * 3.2F)), y - (radius * 3F)),
+                Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
+                textOnTop = false,
+                bottomNav = params.withBottomNav
         )
     }
 
     val showOnBottomNavLeft = {
         createOverLay(
-            R.drawable.tutorial_line3,
-            Pair((x - (radius * 3.5F)), y - (radius * 1.5F)),
-            Pair((x - (radius * 4F)), y - (radius * 3F)),
-            Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
-            textOnTop = false,
-            bottomNav = true
+                R.drawable.tutorial_line3,
+                Pair((x - (radius * 3.5F)), y - (radius * 1.5F)),
+                Pair((x - (radius * 4F)), y - (radius * 3F)),
+                Pair(-params.BIAS_SMALL, -params.BIAS_SMALL),
+                textOnTop = false,
+                bottomNav = params.withBottomNav
         )
     }
 }
