@@ -176,8 +176,8 @@ abstract class TutorialImpl(
         rootView.addView(lineView)
         rootView.addView(textView)
 
-        // Animations
-        backgroundView.circle_overlay.show(x, y)
+        // Animations disabled for now
+//        backgroundView.circle_overlay.show(x, y)
     }
 
     protected fun setTutorialText(titleId: Int, messageId: Int) {
