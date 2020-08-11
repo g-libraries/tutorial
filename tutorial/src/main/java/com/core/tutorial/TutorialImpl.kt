@@ -56,9 +56,10 @@ abstract class TutorialImpl(
 
     protected var step: Int = 0
 
-    private var x = 0f
-    private var y = 0f
-    private var radius = 0f
+    // Used for Tutorial view positioning, used in Tutorial Strategies which can be implemented in app
+    var x = 0f
+    var y = 0f
+    var radius = 0f
 
     // Must be inside attach() method to listen for Fragments lifecycle events, see implementation for reference
     abstract fun attachNavigationCallbacks(fragmentManager: FragmentManager)
