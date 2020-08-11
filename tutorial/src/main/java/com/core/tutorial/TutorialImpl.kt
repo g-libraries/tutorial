@@ -90,101 +90,95 @@ abstract class TutorialImpl(
         textOnTop: Boolean,
         bottomNav: Boolean = false
     ) {
-        // Hide current step
-        rootView.hide()
-        Handler().postDelayed({
-            // Clear old tutorial views
-            rootView.removeAllViews()
+        // Clear old tutorial views
+        rootView.removeAllViews()
 
-            // Create new tutorial views
-            val container = rootActivity.findViewById(android.R.id.content) as ViewGroup
+        // Create new tutorial views
+        val container = rootActivity.findViewById(android.R.id.content) as ViewGroup
 
-            // Background: tint and circle with hole
-            val backgroundView = LayoutInflater.from(rootActivity)
-                .inflate(R.layout.tutorial_overlay, container, false)
-            backgroundView.circle_overlay.centerX = x
-            backgroundView.circle_overlay.centerY = y
-            backgroundView.circle_overlay.gradientCenterX =
-                x + (rootView.measuredWidth * bgBiasHorVert.first)
-            backgroundView.circle_overlay.gradientCenterY =
-                y + (rootView.measuredWidth * bgBiasHorVert.second)
-            backgroundView.circle_overlay.radius = radius
-            backgroundView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
-            backgroundView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
+        // Background: tint and circle with hole
+        val backgroundView = LayoutInflater.from(rootActivity)
+            .inflate(R.layout.tutorial_overlay, container, false)
+        backgroundView.circle_overlay.centerX = x
+        backgroundView.circle_overlay.centerY = y
+        backgroundView.circle_overlay.gradientCenterX =
+            x + (rootView.measuredWidth * bgBiasHorVert.first)
+        backgroundView.circle_overlay.gradientCenterY =
+            y + (rootView.measuredWidth * bgBiasHorVert.second)
+        backgroundView.circle_overlay.radius = radius
+        backgroundView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
+        backgroundView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
 
-            // Line
-            val lineView = ImageView(rootActivity)
-            lineView.setImageDrawable(ContextCompat.getDrawable(rootActivity, lvId))
-            lineView.layoutParams = LinearLayout.LayoutParams(
+        // Line
+        val lineView = ImageView(rootActivity)
+        lineView.setImageDrawable(ContextCompat.getDrawable(rootActivity, lvId))
+        lineView.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        lineView.x = lvXY.first
+        lineView.y = lvXY.second
+
+        // Text
+        val textView =
+            LayoutInflater.from(rootActivity).inflate(params.textLayoutId, container, false)
+
+        titleTV = textView.findViewById(params.textViewTitleId)
+        messageTV = textView.findViewById(params.textViewMessageId)
+
+        textView.applyGlobalLayoutListener {
+            it?.let {
+                it.x = tvXY.first
+                it.y =
+                    tvXY.second + (if (textOnTop) it.measuredHeight / 2 else -it.measuredHeight / 2)
+            }
+        }
+
+        // Bottom Navigation icon and background optional tweak
+
+        // Icons to overlay hole, only for bottom nav tutorial items for "perfect" look
+        val iconBGView = ImageView(rootActivity)
+        iconBGView.setBackgroundColor(
+            ContextCompat.getColor(
+                rootActivity,
+                params.iconBGColorId
+            )
+        )
+        iconBGView.layoutParams = LinearLayout.LayoutParams(
+            radius.toInt() * 3,
+            radius.toInt() * 3
+        )
+
+        if (bottomNav) {
+            iconBGView.applyGlobalLayoutListener {
+                it?.let {
+                    it.x = x - (it.measuredWidth / 2)
+                    it.y = y - (it.measuredWidth / 2)
+                }
+            }
+            bottomNavIconIV = ImageView(rootActivity)
+            bottomNavIconIV.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            lineView.x = lvXY.first
-            lineView.y = lvXY.second
-
-            // Text
-            val textView =
-                LayoutInflater.from(rootActivity).inflate(params.textLayoutId, container, false)
-
-            titleTV = textView.findViewById(params.textViewTitleId)
-            messageTV = textView.findViewById(params.textViewMessageId)
-
-            textView.applyGlobalLayoutListener {
+            bottomNavIconIV.applyGlobalLayoutListener {
                 it?.let {
-                    it.x = tvXY.first
-                    it.y =
-                        tvXY.second + (if (textOnTop) it.measuredHeight / 2 else -it.measuredHeight / 2)
+                    it.x = x - (it.measuredWidth / 2)
+                    it.y = y - (it.measuredWidth / 2)
                 }
             }
+            // Add bottom nav icon Tutorial view to layout
+            rootView.addView(iconBGView)
+            rootView.addView(bottomNavIconIV)
+        }
 
-            // Bottom Navigation icon and background optional tweak
+        // Add all other Tutorial views
+        rootView.addView(backgroundView)
+        rootView.addView(lineView)
+        rootView.addView(textView)
 
-            // Icons to overlay hole, only for bottom nav tutorial items for "perfect" look
-            val iconBGView = ImageView(rootActivity)
-            iconBGView.setBackgroundColor(
-                ContextCompat.getColor(
-                    rootActivity,
-                    params.iconBGColorId
-                )
-            )
-            iconBGView.layoutParams = LinearLayout.LayoutParams(
-                radius.toInt() * 3,
-                radius.toInt() * 3
-            )
-
-            if (bottomNav) {
-                iconBGView.applyGlobalLayoutListener {
-                    it?.let {
-                        it.x = x - (it.measuredWidth / 2)
-                        it.y = y - (it.measuredWidth / 2)
-                    }
-                }
-                bottomNavIconIV = ImageView(rootActivity)
-                bottomNavIconIV.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                bottomNavIconIV.applyGlobalLayoutListener {
-                    it?.let {
-                        it.x = x - (it.measuredWidth / 2)
-                        it.y = y - (it.measuredWidth / 2)
-                    }
-                }
-                // Add bottom nav icon Tutorial view to layout
-                rootView.addView(iconBGView)
-                rootView.addView(bottomNavIconIV)
-            }
-
-            // Add all other Tutorial views
-            rootView.addView(backgroundView)
-            rootView.addView(lineView)
-            rootView.addView(textView)
-
-            // Animations
-            rootView.alpha = 1.0f
-            backgroundView.show()
-
-        }, 150)
+        // Animations
+        backgroundView.show()
     }
 
     protected fun setTutorialText(titleId: Int, messageId: Int) {
