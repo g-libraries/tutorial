@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.FrameLayout
 import android.graphics.Rect
-import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.view.*
@@ -178,7 +177,7 @@ abstract class TutorialImpl(
         rootView.addView(textView)
 
         // Animations
-        backgroundView.show()
+        backgroundView.circle_overlay.show(x, y)
     }
 
     protected fun setTutorialText(titleId: Int, messageId: Int) {
@@ -292,15 +291,13 @@ abstract class TutorialImpl(
         }
     }
 
-    private fun View.show() {
+    private fun View.show(x: Float, y: Float) {
         // alpha
         this.animate().alpha(1.0f)
         // circular reveal
-        val cx = this.width / 2
-        val cy = this.height / 2
 
-        val finalRadius = hypot(cx.toDouble(), cy.toDouble()).toFloat()
-        val anim = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
+        val finalRadius = hypot(x.toDouble(), y.toDouble()).toFloat()
+        val anim = ViewAnimationUtils.createCircularReveal(this, x.toInt(), y.toInt(), 0f, finalRadius)
         anim.start()
     }
 }
