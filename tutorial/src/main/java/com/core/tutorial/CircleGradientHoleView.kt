@@ -42,8 +42,7 @@ class CircleGradientHoleView : LinearLayout {
 
         // Draw background
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.color = ContextCompat.getColor(context, android.R.color.black)
-        paint.alpha = 160
+        paint.color = ContextCompat.getColor(context, android.R.color.transparent)
         osCanvas.drawRect(outerRectangle, paint)
 
         // Draw gradient circle
