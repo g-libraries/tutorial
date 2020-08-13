@@ -2,14 +2,18 @@ package com.core.tutorial
 
 import android.animation.ObjectAnimator
 import android.app.Activity
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.FrameLayout
 import android.graphics.Rect
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Interpolator
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.core.basicextensions.applyGlobalLayoutListener
 import com.core.common.interfaces.ITutorial
@@ -47,7 +51,12 @@ abstract class TutorialImpl(
         var BIAS_ZERO: Float = 0F,
         var BIAS_SMALL: Float = 0.12F,
         var BIAS_LARGE: Float = 0.37F,
-        var withBottomNav: Boolean = true
+        var withBottomNav: Boolean = true,
+        // Animation on/off, delay and duration
+        var animEnabled: Boolean = false,
+        var animDelay: Long = 150L,
+        var animDuration: Long = 500L,
+        var animInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     )
 
     private lateinit var titleTV: TextView
@@ -97,17 +106,22 @@ abstract class TutorialImpl(
         val container = rootActivity.findViewById(android.R.id.content) as ViewGroup
 
         // Background: tint and circle with hole
-        val backgroundView = LayoutInflater.from(rootActivity)
+        val overlayView = LayoutInflater.from(rootActivity)
             .inflate(R.layout.tutorial_overlay, container, false)
-        backgroundView.circle_overlay.centerX = x
-        backgroundView.circle_overlay.centerY = y
-        backgroundView.circle_overlay.gradientCenterX =
+
+        overlayView.circle_background.centerX = x
+        overlayView.circle_background.centerY = y
+        overlayView.circle_background.radius = radius
+
+        overlayView.circle_overlay.centerX = x
+        overlayView.circle_overlay.centerY = y
+        overlayView.circle_overlay.gradientCenterX =
             x + (rootView.measuredWidth * bgBiasHorVert.first)
-        backgroundView.circle_overlay.gradientCenterY =
+        overlayView.circle_overlay.gradientCenterY =
             y + (rootView.measuredWidth * bgBiasHorVert.second)
-        backgroundView.circle_overlay.radius = radius
-        backgroundView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
-        backgroundView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
+        overlayView.circle_overlay.radius = radius
+        overlayView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
+        overlayView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
 
         // Line
         val lineView = ImageView(rootActivity)
@@ -135,7 +149,6 @@ abstract class TutorialImpl(
         }
 
         // Bottom Navigation icon and background optional tweak
-
         // Icons to overlay hole, only for bottom nav tutorial items for "perfect" look
         val iconBGView = ImageView(rootActivity)
         iconBGView.setBackgroundColor(
@@ -173,12 +186,14 @@ abstract class TutorialImpl(
         }
 
         // Add all other Tutorial views
-        rootView.addView(backgroundView)
+        rootView.addView(overlayView)
         rootView.addView(lineView)
         rootView.addView(textView)
 
-        // Animations disabled for now
-        backgroundView.circle_overlay.showAnim(x, y)
+        // Animations
+        if (params.animEnabled) {
+            overlayView.circle_overlay.showAnim(x, y, params)
+        }
     }
 
     protected fun setTutorialText(titleId: Int, messageId: Int) {
@@ -292,13 +307,20 @@ abstract class TutorialImpl(
         }
     }
 
-    private fun View.showAnim(x: Float, y: Float) {
+    private fun View.showAnim(x: Float, y: Float, params: Params) {
+        this.alpha = 0f
         // alpha
-        this.animate().alpha(1.0f)
+        ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+            startDelay = params.animDelay
+            duration = params.animDuration
+        }
         // circular reveal
         val finalRadius = hypot(x.toDouble(), y.toDouble()).toFloat()
-        val anim = ViewAnimationUtils.createCircularReveal(this, x.toInt(), y.toInt(), 0f, finalRadius)
-        anim.interpolator = AccelerateDecelerateInterpolator()
+        val anim =
+            ViewAnimationUtils.createCircularReveal(this, x.toInt(), y.toInt(), 0f, finalRadius)
+        anim.startDelay = params.animDelay
+        anim.duration = params.animDuration
+        anim.interpolator = params.animInterpolator
         anim.start()
     }
 }
