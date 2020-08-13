@@ -67,8 +67,8 @@ class CircleGradientHoleView : LinearLayout {
             TileMode.MIRROR
         ) } else if (gradientType == Type.CIRCLE) {
             paint.shader = RadialGradient(
-                width / circleRadiusDivider,
-                height / circleRadiusDivider,
+                centerX,
+                centerY,
                 width.toFloat(),
                 ContextCompat.getColor(context, gradientStartColorId),
                 ContextCompat.getColor(context, gradientEndColorId),
