@@ -54,9 +54,10 @@ abstract class TutorialImpl(
         var withBottomNav: Boolean = true,
         // Animation on/off, delay and duration
         var animEnabled: Boolean = false,
-        var animDelay: Long = 150L,
-        var animDuration: Long = 500L,
-        var animHighlightRadius: Float = 5F, // How much times smaller than view size
+        var animShowDuration: Long = 150L,
+        var animHighlightDelay: Long = 150L,
+        var animHighlightDuration: Long = 500L,
+        var animHighlightRadius: Float = 8F, // How much times smaller than view size
         var animHighlightColorId: Int = R.color.tutorial_highlight,
         var animInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     )
@@ -125,8 +126,8 @@ abstract class TutorialImpl(
         overlayView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
         overlayView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
 
-        overlayView.circle_animation.centerX = x
-        overlayView.circle_animation.centerY = y
+        overlayView.circle_animation.centerX = x + (rootView.measuredWidth * bgBiasHorVert.first)
+        overlayView.circle_animation.centerY = y + (rootView.measuredWidth * bgBiasHorVert.second)
         overlayView.circle_animation.gradientCenterX =
             x + (rootView.measuredWidth * bgBiasHorVert.first)
         overlayView.circle_animation.gradientCenterY =
@@ -327,7 +328,7 @@ abstract class TutorialImpl(
     private fun View.showAnim(params: Params) {
         // alpha
         this.alpha = 0f
-        this.animate().alpha(1f).setStartDelay(params.animDelay).duration = params.animDuration
+        this.animate().alpha(1f).duration = params.animShowDuration
     }
 
     private fun View.showHighlightAnim(x: Float, y: Float, params: Params) {
@@ -335,13 +336,13 @@ abstract class TutorialImpl(
         val finalRadius = hypot(x.toDouble(), y.toDouble()).toFloat()
         val anim =
             ViewAnimationUtils.createCircularReveal(this, x.toInt(), y.toInt(), 0f, finalRadius)
-        anim.startDelay = params.animDelay
-        anim.duration = params.animDuration
+        anim.startDelay = params.animHighlightDelay
+        anim.duration = params.animHighlightDuration
         anim.interpolator = params.animInterpolator
         anim.start()
 
         // alpha
         this.alpha = 1f
-        this.animate().alpha(0f).startDelay = params.animDelay + params.animDuration
+        this.animate().alpha(0f).startDelay = params.animHighlightDelay + params.animHighlightDuration
     }
 }
