@@ -310,10 +310,7 @@ abstract class TutorialImpl(
     private fun View.showAnim(x: Float, y: Float, params: Params) {
         this.alpha = 0f
         // alpha
-        ObjectAnimator.ofFloat(this, "alpha", 0f, 255f).apply {
-            startDelay = params.animDelay
-            duration = params.animDuration
-        }
+        this.animate().alpha(1f).setStartDelay(params.animDelay).duration = params.animDuration
         // circular reveal
         val finalRadius = hypot(x.toDouble(), y.toDouble()).toFloat()
         val anim =

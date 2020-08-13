@@ -46,7 +46,8 @@ open class HoleView : LinearLayout {
         // Draw transparent circle
         paint.color = Color.TRANSPARENT
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
-        osCanvas.drawCircle(centerX, centerY, radius, paint)
+        val bigRadius = radius * 1.1f // big radius to ensure User wont see this bg through overlay hole
+        osCanvas.drawCircle(centerX, centerY, bigRadius, paint)
     }
 
     override fun isInEditMode(): Boolean {
