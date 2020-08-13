@@ -58,7 +58,10 @@ abstract class TutorialImpl(
         var animHighlightDelay: Long = 150L,
         var animHighlightDuration: Long = 500L,
         var animHighlightRadius: Float = 8F, // How much times smaller than view size
-        var animHighlightColorId: Int = R.color.tutorial_highlight,
+        var animHighlightColorIds: Pair<Int, Int> = Pair(
+            R.color.tutorial_highlight,
+            android.R.color.transparent
+        ),
         var animInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     )
 
@@ -131,8 +134,9 @@ abstract class TutorialImpl(
         overlayView.circle_animation.gradientCenterX = x
         overlayView.circle_animation.gradientCenterY = y
         overlayView.circle_animation.radius = radius
-        overlayView.circle_animation.gradientStartColorId = params.animHighlightColorId
-        overlayView.circle_animation.gradientEndColorId = params.animHighlightColorId
+        overlayView.circle_animation.gradientType = CircleGradientHoleView.Type.CIRCLE
+        overlayView.circle_animation.gradientStartColorId = params.animHighlightColorIds.first
+        overlayView.circle_animation.gradientEndColorId = params.animHighlightColorIds.second
         overlayView.circle_animation.circleRadiusDivider = params.animHighlightRadius
 
         // Line

@@ -17,6 +17,7 @@ class CircleGradientHoleView : LinearLayout {
     var radius: Float = 0F
     var circleRadiusDivider: Float = 3F // By default circle is 1/3 of screen
 
+    var gradientType = Type.LINEAR
     var gradientStartColorId: Int = android.R.color.black
     var gradientEndColorId: Int = android.R.color.white
 
@@ -54,6 +55,8 @@ class CircleGradientHoleView : LinearLayout {
         paint.color = Color.BLACK
         paint.strokeWidth = 10F
         paint.style = Paint.Style.FILL_AND_STROKE
+
+        if (gradientType == Type.LINEAR) {
         paint.shader = LinearGradient(
             width / circleRadiusDivider,
             height / circleRadiusDivider,
@@ -62,7 +65,17 @@ class CircleGradientHoleView : LinearLayout {
             ContextCompat.getColor(context, gradientStartColorId),
             ContextCompat.getColor(context, gradientEndColorId),
             TileMode.MIRROR
-        )
+        ) } else if (gradientType == Type.CIRCLE) {
+            paint.shader = RadialGradient(
+                width / circleRadiusDivider,
+                height / circleRadiusDivider,
+                width.toFloat(),
+                ContextCompat.getColor(context, gradientStartColorId),
+                ContextCompat.getColor(context, gradientEndColorId),
+                TileMode.CLAMP)
+        }
+
+
         osCanvas.drawCircle(
             if (gradientCenterX != 0F) gradientCenterX else centerX,
             if (gradientCenterY != 0F) gradientCenterY else centerY,
@@ -82,5 +95,9 @@ class CircleGradientHoleView : LinearLayout {
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
         bitmap = null
+    }
+
+    enum class Type {
+        LINEAR, CIRCLE
     }
 }
