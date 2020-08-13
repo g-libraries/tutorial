@@ -8,8 +8,7 @@
     <com.core.tutorial.HoleView
             android:id="@+id/circle_background"
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:background="#65000000"/>
+            android:layout_width="match_parent"/>
 
     <com.core.tutorial.CircleGradientHoleView
             android:id="@+id/circle_overlay"

@@ -310,7 +310,7 @@ abstract class TutorialImpl(
     private fun View.showAnim(x: Float, y: Float, params: Params) {
         this.alpha = 0f
         // alpha
-        ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).apply {
+        ObjectAnimator.ofFloat(this, "alpha", 0f, 255f).apply {
             startDelay = params.animDelay
             duration = params.animDuration
         }
