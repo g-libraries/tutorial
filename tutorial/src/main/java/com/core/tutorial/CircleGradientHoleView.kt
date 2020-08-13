@@ -3,14 +3,18 @@ package com.core.tutorial
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.widget.LinearLayout
 import android.graphics.Shader.TileMode
 import android.support.v4.content.ContextCompat
 
 
-class CircleGradientHoleView : HoleView {
+class CircleGradientHoleView : LinearLayout {
     private var bitmap: Bitmap? = null
+    var centerX: Float = 0F
+    var centerY: Float = 0F
     var gradientCenterX: Float = 0F
     var gradientCenterY: Float = 0F
+    var radius: Float = 0F
 
     var gradientStartColorId: Int = android.R.color.black
     var gradientEndColorId: Int = android.R.color.white
@@ -52,6 +56,11 @@ class CircleGradientHoleView : HoleView {
         osCanvas.drawCircle(if (gradientCenterX != 0F) gradientCenterX else centerX,
             if (gradientCenterY != 0F) gradientCenterY else centerY,
             height / 3F, paint)
+
+        // Draw transparent circle
+        paint.color = Color.TRANSPARENT
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OUT)
+        osCanvas.drawCircle(centerX, centerY, radius, paint)
     }
 
     override fun isInEditMode(): Boolean {
