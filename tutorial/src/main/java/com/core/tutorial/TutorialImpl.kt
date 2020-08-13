@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Interpolator
 import android.widget.TextView
 import com.core.basicextensions.applyGlobalLayoutListener
 import com.core.common.interfaces.ITutorial
@@ -179,7 +178,7 @@ abstract class TutorialImpl(
         rootView.addView(textView)
 
         // Animations disabled for now
-//        backgroundView.circle_overlay.show(x, y)
+        backgroundView.circle_overlay.showAnim(x, y)
     }
 
     protected fun setTutorialText(titleId: Int, messageId: Int) {
@@ -287,13 +286,13 @@ abstract class TutorialImpl(
         )
     }
 
-    private fun View.hide() {
+    private fun View.hideAnim() {
         ObjectAnimator.ofFloat(this, "alpha", 1f, 0f).apply {
             duration = 250
         }
     }
 
-    private fun View.show(x: Float, y: Float) {
+    private fun View.showAnim(x: Float, y: Float) {
         // alpha
         this.animate().alpha(1.0f)
         // circular reveal
