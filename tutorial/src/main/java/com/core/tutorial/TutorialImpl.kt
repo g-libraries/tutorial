@@ -126,12 +126,10 @@ abstract class TutorialImpl(
         overlayView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
         overlayView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
 
-        overlayView.circle_animation.centerX = x + (rootView.measuredWidth * bgBiasHorVert.first)
-        overlayView.circle_animation.centerY = y + (rootView.measuredWidth * bgBiasHorVert.second)
-        overlayView.circle_animation.gradientCenterX =
-            x + (rootView.measuredWidth * bgBiasHorVert.first)
-        overlayView.circle_animation.gradientCenterY =
-            y + (rootView.measuredWidth * bgBiasHorVert.second)
+        overlayView.circle_animation.centerX = x
+        overlayView.circle_animation.centerY = y
+        overlayView.circle_animation.gradientCenterX = x
+        overlayView.circle_animation.gradientCenterY = y
         overlayView.circle_animation.radius = radius
         overlayView.circle_animation.gradientStartColorId = params.animHighlightColorId
         overlayView.circle_animation.gradientEndColorId = params.animHighlightColorId
@@ -343,6 +341,7 @@ abstract class TutorialImpl(
 
         // alpha
         this.alpha = 1f
-        this.animate().alpha(0f).startDelay = params.animHighlightDelay + params.animHighlightDuration
+        this.animate().alpha(0f).startDelay =
+            params.animHighlightDelay + params.animHighlightDuration
     }
 }
