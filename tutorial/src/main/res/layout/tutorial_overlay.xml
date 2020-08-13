@@ -15,4 +15,9 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
 
+    <com.core.tutorial.CircleGradientHoleView
+            android:id="@+id/circle_animation"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
 </FrameLayout>

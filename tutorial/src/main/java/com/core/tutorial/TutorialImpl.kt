@@ -56,6 +56,8 @@ abstract class TutorialImpl(
         var animEnabled: Boolean = false,
         var animDelay: Long = 150L,
         var animDuration: Long = 500L,
+        var animHighlightRadius: Float = 5F, // How much times smaller than view size
+        var animHighlightColorId: Int = R.color.tutorial_highlight,
         var animInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     )
 
@@ -122,6 +124,17 @@ abstract class TutorialImpl(
         overlayView.circle_overlay.radius = radius
         overlayView.circle_overlay.gradientStartColorId = params.gradientColorIds.first
         overlayView.circle_overlay.gradientEndColorId = params.gradientColorIds.second
+
+        overlayView.circle_animation.centerX = x
+        overlayView.circle_animation.centerY = y
+        overlayView.circle_animation.gradientCenterX =
+            x + (rootView.measuredWidth * bgBiasHorVert.first)
+        overlayView.circle_animation.gradientCenterY =
+            y + (rootView.measuredWidth * bgBiasHorVert.second)
+        overlayView.circle_animation.radius = radius
+        overlayView.circle_animation.gradientStartColorId = params.animHighlightColorId
+        overlayView.circle_animation.gradientEndColorId = params.animHighlightColorId
+        overlayView.circle_animation.circleRadiusDivider = params.animHighlightRadius
 
         // Line
         val lineView = ImageView(rootActivity)
@@ -192,7 +205,11 @@ abstract class TutorialImpl(
 
         // Animations
         if (params.animEnabled) {
-            overlayView.circle_overlay.showAnim(x, y, params)
+            overlayView.circle_overlay.showAnim(params)
+            overlayView.circle_animation.visibility = View.VISIBLE
+            overlayView.circle_animation.showHighlightAnim(x, y, params)
+        } else {
+            overlayView.circle_animation.visibility = View.GONE
         }
     }
 
@@ -307,10 +324,13 @@ abstract class TutorialImpl(
         }
     }
 
-    private fun View.showAnim(x: Float, y: Float, params: Params) {
-        this.alpha = 0f
+    private fun View.showAnim(params: Params) {
         // alpha
+        this.alpha = 0f
         this.animate().alpha(1f).setStartDelay(params.animDelay).duration = params.animDuration
+    }
+
+    private fun View.showHighlightAnim(x: Float, y: Float, params: Params) {
         // circular reveal
         val finalRadius = hypot(x.toDouble(), y.toDouble()).toFloat()
         val anim =
@@ -319,5 +339,9 @@ abstract class TutorialImpl(
         anim.duration = params.animDuration
         anim.interpolator = params.animInterpolator
         anim.start()
+
+        // alpha
+        this.alpha = 1f
+        this.animate().alpha(0f).startDelay = params.animDelay + params.animDuration
     }
 }

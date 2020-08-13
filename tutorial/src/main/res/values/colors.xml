@@ -4,5 +4,6 @@
     <color name="tutorial_gradient_start">#FFF578EA</color>
     <color name="tutorial_gradient_end">#6436b2</color>
     <color name="tutorial_icon_bg">#FFF578EA</color>
+    <color name="tutorial_highlight">#50FFFFFF</color>
 
 </resources>

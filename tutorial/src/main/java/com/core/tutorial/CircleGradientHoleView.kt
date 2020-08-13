@@ -2,10 +2,10 @@ package com.core.tutorial
 
 import android.content.Context
 import android.graphics.*
-import android.util.AttributeSet
-import android.widget.LinearLayout
 import android.graphics.Shader.TileMode
 import android.support.v4.content.ContextCompat
+import android.util.AttributeSet
+import android.widget.LinearLayout
 
 
 class CircleGradientHoleView : LinearLayout {
@@ -15,6 +15,7 @@ class CircleGradientHoleView : LinearLayout {
     var gradientCenterX: Float = 0F
     var gradientCenterY: Float = 0F
     var radius: Float = 0F
+    var circleRadiusDivider: Float = 3F // By default circle is 1/3 of screen
 
     var gradientStartColorId: Int = android.R.color.black
     var gradientEndColorId: Int = android.R.color.white
@@ -23,7 +24,11 @@ class CircleGradientHoleView : LinearLayout {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
@@ -50,12 +55,19 @@ class CircleGradientHoleView : LinearLayout {
         paint.strokeWidth = 10F
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.shader = LinearGradient(
-            width / 3f, height / 3f, width.toFloat(),
-            height.toFloat(), ContextCompat.getColor(context, gradientStartColorId), ContextCompat.getColor(context, gradientEndColorId), TileMode.MIRROR
+            width / circleRadiusDivider,
+            height / circleRadiusDivider,
+            width.toFloat(),
+            height.toFloat(),
+            ContextCompat.getColor(context, gradientStartColorId),
+            ContextCompat.getColor(context, gradientEndColorId),
+            TileMode.MIRROR
         )
-        osCanvas.drawCircle(if (gradientCenterX != 0F) gradientCenterX else centerX,
+        osCanvas.drawCircle(
+            if (gradientCenterX != 0F) gradientCenterX else centerX,
             if (gradientCenterY != 0F) gradientCenterY else centerY,
-            height / 3F, paint)
+            height / circleRadiusDivider, paint
+        )
 
         // Draw transparent circle
         paint.color = Color.TRANSPARENT
